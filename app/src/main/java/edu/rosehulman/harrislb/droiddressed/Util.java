@@ -1,5 +1,14 @@
 package edu.rosehulman.harrislb.droiddressed;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
+
 /**
  * Created by harrislb on 1/25/2016.
  */
@@ -41,5 +50,47 @@ public class Util {
         };
         return urls[(int) (Math.random() * urls.length)];
     }
+
+    public static void removeCategory(Context context, Category category) {
+        // MB: Moved to first to try to speed up UI. Test for race conditions.
+        // Removes from list of courses
+        Firebase courseRef = new Firebase(Constants.CATEGORY_PATH + "/" + category.getKey());
+        courseRef.removeValue();
+
+        // Remove this course from all its owners.
+        Firebase ownersRef = new Firebase(Constants.OWNERS_PATH);
+        for (String uid : category.getOwners().keySet()) {
+            ownersRef.child(uid).child(Owner.CATEGORIES).child(category.getKey()).removeValue();
+        }
+
+        // CONSIDER: Remove all students associated with this course
+
+
+        // Remove all assignments
+        final Firebase assignmentsRef = new Firebase(Constants.ARTICLES_PATH);
+        Query assignmentsForCourseRef = assignmentsRef.orderByChild(Article.CATEGORY_KEY).equalTo(category.getKey());
+        assignmentsForCourseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    assignmentsRef.child(snapshot.getKey()).removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d(Constants.TAG, "Cancelled");
+            }
+        });
+
+        // CONSIDER: Remove all grade entries associated with this course
+
+
+        // Remove from SharedPrefs
+        // MB: CONSIDER What if we aren't removing the current course?
+        SharedPreferencesUtils.removeCurrentCourseKey(context);
+    }
+
+
 
 }

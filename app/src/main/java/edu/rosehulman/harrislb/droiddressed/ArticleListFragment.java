@@ -16,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 /**
@@ -26,9 +27,20 @@ public class ArticleListFragment extends Fragment {
     private ArticleCallback mCallback;
     private ArticleAdapter mAdapter;
 
+    private static final String ARG_CURRENT_CATEGORY_KEY = "CURRENT_CATEGORY_KEY";
+    private String mCurrentCategoryKey;
+
     public ArticleListFragment(){}
 
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments() != null) {
+            mCurrentCategoryKey = getArguments().getString(ARG_CURRENT_CATEGORY_KEY);
+
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -51,8 +63,14 @@ public class ArticleListFragment extends Fragment {
             }
         });
 
-        mAdapter = new ArticleAdapter(mCallback, getContext());
+        Button mPreviewOutfitButton = (Button) cl.findViewById(R.id.preview_button);
+        mPreviewOutfitButton.setVisibility(View.INVISIBLE);
+
+        mAdapter = new ArticleAdapter(mCallback, getContext(), mPreviewOutfitButton, mCurrentCategoryKey);
         view.setAdapter(mAdapter);
+
+
+
         return cl;
     }
 
@@ -64,6 +82,14 @@ public class ArticleListFragment extends Fragment {
         } else{
             throw new RuntimeException(context.toString() + " must implement Callback");
         }
+    }
+
+    public static ArticleListFragment newInstance(String currentCategoryKey){
+        ArticleListFragment fragment = new ArticleListFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_CURRENT_CATEGORY_KEY, currentCategoryKey);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -145,5 +171,9 @@ public class ArticleListFragment extends Fragment {
         };
         //used to say getSupportFragmentManager(), "add");
         df.show(getFragmentManager(), "add");
+    }
+
+    public interface OnArticleSelectedListener {
+        void onArticleSelected(Article article);
     }
 }

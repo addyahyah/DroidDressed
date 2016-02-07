@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * Created by harrislb on 2/1/2016.
  */
 public class Article {
+    public static final String CATEGORY_KEY = "categoryKey";
 
     private String url;
     private String category;

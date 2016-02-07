@@ -7,7 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
-public class HomeActivity extends AppCompatActivity implements OutfitpicListFragment.Callback, ClosetFragment.ClosetCallback, ArticleListFragment.ArticleCallback {
+import com.firebase.client.Firebase;
+
+public class HomeActivity extends AppCompatActivity implements OutfitpicListFragment.Callback, ClosetFragment.ClosetCallback, ArticleListFragment.ArticleCallback,
+CategoryListFragment.OnCategorySelectedListener{
 //
 //    private Button outfitButton;
 //    private Button articlesButton;
@@ -21,6 +24,7 @@ public class HomeActivity extends AppCompatActivity implements OutfitpicListFrag
 //        articlesButton = (Button) findViewById(R.id.articles_button);
 //
 //    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +84,16 @@ public class HomeActivity extends AppCompatActivity implements OutfitpicListFrag
 
     @Override
     public void onArticlesButtonSelected() {
+        //old way
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ArticleListFragment fragment = new ArticleListFragment();
+//        ft.replace(R.id.fragment_container, fragment);
+//        ft.addToBackStack("article");
+//        ft.commit();
+
+        //new way
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ArticleListFragment fragment = new ArticleListFragment();
+        CategoryListFragment fragment = new CategoryListFragment();
         ft.replace(R.id.fragment_container, fragment);
         ft.addToBackStack("article");
         ft.commit();
@@ -90,6 +102,11 @@ public class HomeActivity extends AppCompatActivity implements OutfitpicListFrag
 
     @Override
     public void onArticleSelected(Article article) {
+
+    }
+
+    @Override
+    public void onCategorySelected(Category selectedCategory) {
 
     }
 }
