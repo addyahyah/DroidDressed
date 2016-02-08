@@ -30,12 +30,12 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     private List<Article> mArticles;
     private ArticleListFragment.ArticleCallback mCallback;
-    private static final String PICS_PATH = "https://harrsilb-droiddressed.firebaseio.com/articlePics";
+    private static final String PICS_PATH = "https://harrsilb-droiddressed.firebaseio.com/articles";
     private Firebase mFirebase;
     private Context context;
     private String oldCategory = "";
     private String oldURL = "";
-    private List<Article> outfitPreview;
+   // private List<Article> outfitPreview;
     private Button mPreviewOutfitButton;
     private String mCategoryKey;
 
@@ -51,7 +51,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         //mFirebase.addChildEventListener(new PicsChildEventListener());
 
         articlesForCategoryRef.addChildEventListener(new PicsChildEventListener());
-        outfitPreview = new ArrayList<>();
+       // outfitPreview = new ArrayList<>();
         mPreviewOutfitButton = previewButton;
     }
 
@@ -113,30 +113,36 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Article article = mArticles.get(position);
-        holder.mCategoryTextView.setText(article.getCategory());
+        //holder.mCategoryTextView.setText(article.getCategoryKey());
         //holder.mURLTextView.setText(outfitPic.getUrl());
 
         new GetImageTask(holder.mURLImageView).execute(mArticles.get(position).getUrl());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.onArticleSelected(mArticles.get(position));
+               if( mCallback.onArticleSelected(mArticles.get(position))){
+                    mPreviewOutfitButton.setVisibility(View.VISIBLE);
+               }
+                else{
+                   mPreviewOutfitButton.setVisibility(View.INVISIBLE);
+               }
+
 
                 //handle preview outfit button
-                if (outfitPreview.contains(mArticles.get(position))) {
-                    outfitPreview.remove(mArticles.get(position));
-
-                    if(outfitPreview.size()==0){
-                        mPreviewOutfitButton.setVisibility(View.INVISIBLE);
-                    }
-                }
-                else{
-                    outfitPreview.add(mArticles.get(position));
-                    if(mPreviewOutfitButton.getVisibility() == View.INVISIBLE){
-                        mPreviewOutfitButton.setVisibility(View.VISIBLE);
-                    }
-
-                }
+//                if (outfitPreview.contains(mArticles.get(position))) {
+//                    outfitPreview.remove(mArticles.get(position));
+//
+//                    if(outfitPreview.size()==0){
+//                        mPreviewOutfitButton.setVisibility(View.INVISIBLE);
+//                    }
+//                }
+//                else{
+//                    outfitPreview.add(mArticles.get(position));
+//                    if(mPreviewOutfitButton.getVisibility() == View.INVISIBLE){
+//                        mPreviewOutfitButton.setVisibility(View.VISIBLE);
+//                    }
+//
+//                }
             }
         });
 
@@ -159,13 +165,20 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         return mArticles.size();
     }
 
-    public void add(Article article) {
-        mFirebase.push().setValue(article);
+//    public void add(Article article) {
+//        mFirebase.push().setValue(article);
+//
+//    }
 
+    public void add(String url){
+        Article article = new Article(mCategoryKey, url);
+        Firebase articleRef = mFirebase.push();
+        String articleKey = articleRef.getKey();
+        articleRef.setValue(article);
     }
 
     public void update(Article article, String newCategory, String newURL){
-        article.setCategory(newCategory);
+        article.setCategoryKey(newCategory);
         article.setUrl(newURL);
         mFirebase.child(article.getKey()).setValue(article);
     }
@@ -178,7 +191,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         final EditText categoryEditText = (EditText) view.findViewById(R.id.dialog_edit_caption_text);
         final EditText urlEditText = (EditText) view.findViewById(R.id.dialog_edit_url_text);
         // pre-populate
-        categoryEditText.setText(article.getCategory());
+        categoryEditText.setText(article.getCategoryKey());
         urlEditText.setText(article.getUrl());
         oldCategory = categoryEditText.getText().toString();
         oldURL = urlEditText.getText().toString();
@@ -249,20 +262,18 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mCategoryTextView;
-        private TextView mURLTextView;
+
         private ImageView mURLImageView;
         //private Button mPreviewOutfitButton;
         public ViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v){
-                    mCallback.onArticleSelected(mArticles.get(getAdapterPosition()));
-
-                }
-            });
-            mCategoryTextView = (TextView) itemView.findViewById(R.id.category_text_article);
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v){
+//                    mCallback.onArticleSelected(mArticles.get(getAdapterPosition()));
+//
+//                }
+//            });
             //mURLTextView = (TextView) itemView.findViewById(R.id.url_text);
              mURLImageView = (ImageView) itemView.findViewById(R.id.url_image_article);
            // mPreviewOutfitButton = (Button) itemView.getRootView().findViewById(R.id.preview_button);

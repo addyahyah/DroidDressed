@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,8 +65,19 @@ public class ArticleListFragment extends Fragment {
         });
 
         Button mPreviewOutfitButton = (Button) cl.findViewById(R.id.preview_button);
-        mPreviewOutfitButton.setVisibility(View.INVISIBLE);
+        mCallback.isPreviewButtonVisible();
+       // mPreviewOutfitButton.setVisibility(View.INVISIBLE);
+        mPreviewOutfitButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                System.out.println("preview outfit clicked");
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, PreviewOutfitFragment.newInstance());
+                ft.addToBackStack("preview_fragment");
+                ft.commit();
+            }
 
+        });
         mAdapter = new ArticleAdapter(mCallback, getContext(), mPreviewOutfitButton, mCurrentCategoryKey);
         view.setAdapter(mAdapter);
 
@@ -85,6 +97,7 @@ public class ArticleListFragment extends Fragment {
     }
 
     public static ArticleListFragment newInstance(String currentCategoryKey){
+        System.out.println("ArticleListFragment's newInstance is calledd");
         ArticleListFragment fragment = new ArticleListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_CURRENT_CATEGORY_KEY, currentCategoryKey);
@@ -102,8 +115,8 @@ public class ArticleListFragment extends Fragment {
 
 
     public interface ArticleCallback {
-        void onArticleSelected(Article article);
-
+        boolean onArticleSelected(Article article);
+        boolean isPreviewButtonVisible();
     }
 
     private void showAddEditDialog(final Article article) {
@@ -116,38 +129,38 @@ public class ArticleListFragment extends Fragment {
                 builder.setView(view);
                 final EditText captionEditText = (EditText) view.findViewById(R.id.dialog_add_caption_text);
                 final EditText urlEditText = (EditText) view.findViewById(R.id.dialog_add_url_text);
-                if (article != null) {
-                    // pre-populate
-                    captionEditText.setText(article.getCategory());
-                    urlEditText.setText(article.getUrl());
-
-                    TextWatcher textWatcher = new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            // empty
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            // empty
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            String caption = captionEditText.getText().toString();
-                            String url = urlEditText.getText().toString();
-                            //if no url is entered, get a random one for testing
-                            System.out.println("url is: " + url);
-                            if(url == ""){
-                                url = Util.randomArticleUrl();
-                            }
-                            mAdapter.update(article, caption, url);
-                        }
-                    };
-
-                    captionEditText.addTextChangedListener(textWatcher);
-                    urlEditText.addTextChangedListener(textWatcher);
-                }
+//                if (article != null) {
+//                    // pre-populate
+//                    captionEditText.setText(article.getCategoryKey());
+//                    urlEditText.setText(article.getUrl());
+//
+//                    TextWatcher textWatcher = new TextWatcher() {
+//                        @Override
+//                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                            // empty
+//                        }
+//
+//                        @Override
+//                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                            // empty
+//                        }
+//
+//                        @Override
+//                        public void afterTextChanged(Editable s) {
+//                            String caption = captionEditText.getText().toString();
+//                            String url = urlEditText.getText().toString();
+//                            //if no url is entered, get a random one for testing
+//                            System.out.println("url is: " + url);
+//                            if(url == ""){
+//                                url = Util.randomArticleUrl();
+//                            }
+//                            mAdapter.update(article, caption, url);
+//                        }
+//                    };
+//
+//                    captionEditText.addTextChangedListener(textWatcher);
+//                    urlEditText.addTextChangedListener(textWatcher);
+//                }
 
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -159,7 +172,8 @@ public class ArticleListFragment extends Fragment {
                             if(url.equals("")){
                                 url = Util.randomArticleUrl();
                             }
-                            mAdapter.add(new Article(caption, url));
+                           // mAdapter.add(new Article(caption, url));
+                            mAdapter.add(url);
                             mAdapter.notifyDataSetChanged();
                         }
                     }
@@ -173,7 +187,7 @@ public class ArticleListFragment extends Fragment {
         df.show(getFragmentManager(), "add");
     }
 
-    public interface OnArticleSelectedListener {
-        void onArticleSelected(Article article);
-    }
+//    public interface OnArticleSelectedListener {
+//        boolean onArticleSelected(Article article);
+//    }
 }

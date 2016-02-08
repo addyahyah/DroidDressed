@@ -16,9 +16,10 @@ import android.view.MenuItem;
 
 import com.firebase.client.Firebase;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnLoginListener,
-        ArticleListFragment.OnArticleSelectedListener,
         CategoryListFragment.OnCategorySelectedListener,
         ClosetFragment.ClosetCallback, OutfitpicListFragment.Callback,
         ArticleListFragment.ArticleCallback
@@ -26,8 +27,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private FloatingActionButton mFab;
     private Toolbar mToolbar;
-
+    private ArrayList<Article> previewArticles;
     private Firebase mFirebaseRef;
+
 
     public FloatingActionButton getFab() {
         return mFab;
@@ -37,7 +39,9 @@ public class MainActivity extends AppCompatActivity implements
         return mToolbar;
     }
 
-
+    public ArrayList<Article> getPreviewArticles(){
+        return this.previewArticles;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements
             initializeFirebase();
             System.out.println("successful initiailize");
         }
+
+        previewArticles = new ArrayList<Article>();
 
       //  mFab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -91,13 +97,13 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferencesUtils.setCurrentUser(this, uid);
 
         // Check if they have a current course
-        String currentCatalogKey = SharedPreferencesUtils.getCurrentCourseKey(this);
+        String currentCategoryKey = SharedPreferencesUtils.getCurrentCourseKey(this);
         Fragment switchTo;
-        if (currentCatalogKey == null || currentCatalogKey.isEmpty()) {
+        if (currentCategoryKey == null || currentCategoryKey.isEmpty()) {
             switchTo = new ClosetFragment();
         } else {
-            //switchTo = ArticleListFragment.newInstance(currentCourseKey);
-            switchTo = ArticleListFragment.newInstance(currentCatalogKey);
+            //switchTo = ArticleListFragment.newInstance(currentCategoryKey);
+            switchTo = new ClosetFragment();
         }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, switchTo);
@@ -148,22 +154,60 @@ public class MainActivity extends AppCompatActivity implements
 //    }
 
     @Override
-    public void onArticleSelected(Article article) {
+    public boolean onArticleSelected(Article article) {
         // DONE: go to grade entry fragment
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container, ArticleListFragment.newInstance(article.getKey()));
-        ft.addToBackStack("article_fragment");
-        ft.commit();
+        //TODO if you want a new Fragment to appear
+//        System.out.println("onArticleSelected called");
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ft.replace(R.id.fragment_container, ArticleDetailFragment.newInstance(article.getKey()));
+//        ft.addToBackStack("article_fragment");
+//        ft.commit();
+
+        if(previewArticles.contains(article)){
+            previewArticles.remove(article);
+            if(previewArticles.size()==0){
+                return false;
+            }
+        }
+        else{
+            previewArticles.add(article);
+
+        }
+        return true;
 
     }
 
-    @Override
+             @Override
+             public boolean isPreviewButtonVisible() {
+                 if(previewArticles.size()==0){
+                     return false;
+                 }
+                 else{
+                     return true;
+                 }
+             }
+
+             @Override
     public void onCategorySelected(Category selectedCategory) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, ArticleListFragment.newInstance(selectedCategory.getKey()));
         ft.addToBackStack("category_fragment");
         ft.commit();
+
+
+
     }
+
+             @Override
+             public boolean isPreviewButtonVisibleCategoryFragment() {
+                 if(previewArticles.size()==0) {
+                     return false;
+                 }
+
+                 else{
+                     return true;
+                 }
+             }
 
              @Override
              public void onOutfitButtonSelected() {
@@ -182,6 +226,10 @@ public class MainActivity extends AppCompatActivity implements
              @Override
              public void onOutfitpicSelected(OutfitPic weatherPic) {
 
+             }
+
+             public void resetPreviewArticles(){
+                 this.previewArticles = new ArrayList<Article>();
              }
 
 //    @Override

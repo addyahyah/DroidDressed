@@ -5,20 +5,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Created by harrislb on 2/1/2016.
  */
-public class Article {
+public class Article implements Comparable<Article> {
     public static final String CATEGORY_KEY = "categoryKey";
 
     private String url;
-    private String category;
+    private String categoryKey;
 
     @JsonIgnore
     private String key;
 
     public Article(){}
 
-    public Article(String category, String url) {
+    public Article(String categoryKey, String url) {
         this.url = url;
-        this.category = category;
+        this.categoryKey = categoryKey;
     }
 
     public void setUrl(String url){
@@ -29,15 +29,15 @@ public class Article {
         this.key = key;
     }
 
-    public void setCategory(String cat){
-        this.category = cat;
+    public void setCategoryKey(String cat){
+        this.categoryKey = cat;
     }
 
     public String getKey(){
         return this.key;
     }
-    public String getCategory(){
-        return this.category;
+    public String getCategoryKey(){
+        return this.categoryKey;
     }
 
     public String getUrl(){
@@ -45,7 +45,13 @@ public class Article {
     }
 
     public void setValues(Article newArticle){
-        this.category = newArticle.category;
+        this.categoryKey = newArticle.categoryKey;
         this.url = newArticle.url;
+    }
+
+    //TODO is this the best thing to compare??
+    @Override
+    public int compareTo(Article another) {
+        return key.compareTo(another.key);
     }
 }

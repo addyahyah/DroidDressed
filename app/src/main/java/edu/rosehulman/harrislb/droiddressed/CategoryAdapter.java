@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.client.ChildEventListener;
@@ -30,10 +31,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private Firebase mOwnerRef;
     private Firebase mCategoriesRef;
     private ArrayList<Category> mCategories = new ArrayList<>();
+    private Button mPreviewOutfitButton;
 
-    public CategoryAdapter(CategoryListFragment categoryListFragment, CategoryListFragment.OnCategorySelectedListener listener) {
+    public CategoryAdapter(CategoryListFragment categoryListFragment, CategoryListFragment.OnCategorySelectedListener listener, Button previewButton) {
         Log.d(Constants.TAG, "CategoryAdapter adding OwnerValueListener");
-
+        mPreviewOutfitButton = previewButton;
         mCategoryListFragment = categoryListFragment;
         mCategorySelectedListener = listener;
 
@@ -54,6 +56,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_view_category, parent, false);
+        //mCategorySelectedListener.isPreviewButtonVisibleCategoryFragment();
         return new ViewHolder(v);
     }
 
@@ -160,6 +163,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             SharedPreferencesUtils.setCurrentCategoryKey(mCategoryListFragment.getContext(), mCategories.get(getAdapterPosition()).getKey());
             Category category = mCategories.get(getAdapterPosition());
             mCategorySelectedListener.onCategorySelected(category);
+
+
+
         }
 
         @Override

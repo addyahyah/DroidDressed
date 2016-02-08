@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 /**
@@ -68,7 +69,10 @@ public class CategoryListFragment extends Fragment {
 //        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 //        recyclerView.setHasFixedSize(true);
 //        registerForContextMenu(recyclerView);
-        mAdapter = new CategoryAdapter(this, mListener);
+
+        Button mPreviewOutfitButton = (Button) cl.findViewById(R.id.preview_button);
+       // mPreviewOutfitButton.setVisibility(View.INVISIBLE);
+        mAdapter = new CategoryAdapter(this, mListener, mPreviewOutfitButton);
         view.setAdapter(mAdapter);
 
         return cl;
@@ -167,5 +171,6 @@ public class CategoryListFragment extends Fragment {
 
     public interface OnCategorySelectedListener {
         void onCategorySelected(Category selectedCategory);
+        boolean isPreviewButtonVisibleCategoryFragment();
     }
 }
