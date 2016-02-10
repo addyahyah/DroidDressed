@@ -1,8 +1,10 @@
 package edu.rosehulman.harrislb.droiddressed;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +22,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import edu.rosehulman.harrislb.droiddressed.ImgurStorage.ImageResponse;
+import edu.rosehulman.harrislb.droiddressed.ImgurStorage.ImgurActivity;
+
 /**
  * Created by harrislb on 2/1/2016.
  */
@@ -31,20 +36,21 @@ public class ArticleListFragment extends Fragment {
     private static final String ARG_CURRENT_CATEGORY_KEY = "CURRENT_CATEGORY_KEY";
     private String mCurrentCategoryKey;
 
+
     public ArticleListFragment(){}
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        System.out.println("OnCreate called in ArticleListFrag");
         super.onCreate(savedInstanceState);
-        if(getArguments() != null) {
-            mCurrentCategoryKey = getArguments().getString(ARG_CURRENT_CATEGORY_KEY);
 
-        }
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        mCurrentCategoryKey = getArguments().getString(ARG_CURRENT_CATEGORY_KEY);
+        System.out.println("Set catKey in onCreateView of articleListFrag and is: " + mCurrentCategoryKey);
         // mAdapter = new edu.rosehulman.harrislb.weatherpics.WeatherpicAdapter(this, this);
         CoordinatorLayout cl = (CoordinatorLayout) inflater.inflate(R.layout.activity_closet, container, false);
 
@@ -60,7 +66,13 @@ public class ArticleListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddEditDialog(null);
+                //generate url method
+                //showAddEditDialog(null);
+
+                //imgur method
+                Intent intent = new Intent(getActivity(), ImgurActivity.class);
+                intent.putExtra("CURRENT_CATEGORY", mCurrentCategoryKey);
+                startActivity(intent);
             }
         });
 
@@ -80,6 +92,17 @@ public class ArticleListFragment extends Fragment {
         });
         mAdapter = new ArticleAdapter(mCallback, getContext(), mPreviewOutfitButton, mCurrentCategoryKey);
         view.setAdapter(mAdapter);
+
+        //for imgur
+        String url =  getArguments().getString("UPLOAD_URL");
+        System.out.println("LINK IS: " + url);
+        String catFromImgur = getArguments().getString("CURRENT_CATEGORY");
+        if(url!=null && catFromImgur!=null){
+            System.out.println("Adding link" + url + "to adapter!");
+            mAdapter.setMCurrentCategoryKey(catFromImgur);
+            mAdapter.add(url);
+            mAdapter.notifyDataSetChanged();
+        }
 
 
 

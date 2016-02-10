@@ -39,6 +39,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     private Button mPreviewOutfitButton;
     private String mCategoryKey;
 
+
+
+
     public ArticleAdapter(ArticleListFragment.ArticleCallback callback, Context context, Button previewButton, String categoryKey) {
 
         mCallback = callback;
@@ -171,6 +174,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 //    }
 
     public void add(String url){
+        System.out.println("mCatKey is: " + mCategoryKey);
         Article article = new Article(mCategoryKey, url);
         Firebase articleRef = mFirebase.push();
         String articleKey = articleRef.getKey();
@@ -181,6 +185,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         article.setCategoryKey(newCategory);
         article.setUrl(newURL);
         mFirebase.child(article.getKey()).setValue(article);
+    }
+
+    public void setMCurrentCategoryKey(String cat){
+        this.mCategoryKey = cat;
     }
 
     private void showEditDialog(final Article article) {

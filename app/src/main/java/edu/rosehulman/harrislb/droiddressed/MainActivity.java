@@ -1,6 +1,8 @@
 package edu.rosehulman.harrislb.droiddressed;
 
 
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -45,6 +47,30 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        String s1 = intent.getStringExtra("Check");
+        if(s1!= null && s1.equals("1")){
+            System.out.println("Got check");
+            s1="";
+            Bundle bundle = new Bundle();
+            bundle.putString("UPLOAD_URL", intent.getStringExtra("UPLOAD_URL"));
+            bundle.putString("CURRENT_CATEGORY", intent.getStringExtra("CURRENT_CATEGORY"));
+            Fragment fragment = new ArticleListFragment();
+            fragment.setArguments(bundle);
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_container, fragment);
+            ft.commit();
+        }
+        else{
+            //should only be called the very first time activity launches
+            initializeFirebaseOnce();
+        }
+
+
+
+        System.out.println("Main's on create called");
         setContentView(R.layout.app_bar);
 
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements
         // Skipped during rotation, but Firebase settings should persist.
         if (savedInstanceState == null) {
             System.out.println("calling initialize firebase");
-            initializeFirebase();
+            reInitializeFirebase();
             System.out.println("successful initiailize");
         }
 
@@ -83,12 +109,18 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void initializeFirebase() {
+             //top two can only be called once per app
+    private void initializeFirebaseOnce() {
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
         mFirebaseRef.keepSynced(true);
     }
+
+             private void reInitializeFirebase() {
+                 mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
+                 mFirebaseRef.keepSynced(true);
+             }
 
     @Override
     public void onLoginComplete() {
@@ -189,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements
 
              @Override
     public void onCategorySelected(Category selectedCategory) {
+        System.out.println("Category selected. key is: " + selectedCategory.getKey());
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, ArticleListFragment.newInstance(selectedCategory.getKey()));
         ft.addToBackStack("category_fragment");
