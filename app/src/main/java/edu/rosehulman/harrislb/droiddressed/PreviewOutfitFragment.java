@@ -85,7 +85,7 @@ public class PreviewOutfitFragment extends Fragment {
             articlePic.setMaxHeight(40);
             articlePic.setMaxWidth(40);
 
-            new GetImageTask(articlePic).execute(previewArticles.get(i).getUrl());
+            new GetImageTask(articlePic).execute(previewArticles.get(i).getURL());
             cl.addView(articlePic);
         }
 

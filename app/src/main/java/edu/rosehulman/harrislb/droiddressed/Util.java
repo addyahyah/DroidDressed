@@ -65,23 +65,23 @@ public class Util {
 
         // CONSIDER: Remove all students associated with this course
 
-
+        //TODO fixthis
         // Remove all assignments
-        final Firebase assignmentsRef = new Firebase(Constants.ARTICLES_PATH);
-        Query assignmentsForCourseRef = assignmentsRef.orderByChild(Article.CATEGORY_KEY).equalTo(category.getKey());
-        assignmentsForCourseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    assignmentsRef.child(snapshot.getKey()).removeValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.d(Constants.TAG, "Cancelled");
-            }
-        });
+//        final Firebase assignmentsRef = new Firebase(Constants.ARTICLES_PATH);
+//        Query assignmentsForCourseRef = assignmentsRef.orderByChild(Article.CATEGORY_KEY).equalTo(category.getKey());
+//        assignmentsForCourseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    assignmentsRef.child(snapshot.getKey()).removeValue();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//                Log.d(Constants.TAG, "Cancelled");
+//            }
+//        });
 
         // CONSIDER: Remove all grade entries associated with this course
 
@@ -89,6 +89,10 @@ public class Util {
         // Remove from SharedPrefs
         // MB: CONSIDER What if we aren't removing the current course?
         SharedPreferencesUtils.removeCurrentCourseKey(context);
+    }
+
+    public static void removeArticle(Context context, Article article) {
+        //TODO hande delete
     }
 
 

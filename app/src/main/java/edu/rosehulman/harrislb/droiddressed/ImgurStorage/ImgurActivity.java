@@ -157,6 +157,7 @@ public class ImgurActivity extends AppCompatActivity implements Callback<ImageRe
             intent.putExtra("UPLOAD_URL", url);
             System.out.println("Intent stored");
 
+
             //this.onBackPressed();
             intent.putExtra("Check", "1");
           //  intent.putExtra("UPLOAD_URL", url);
@@ -177,4 +178,8 @@ public class ImgurActivity extends AppCompatActivity implements Callback<ImageRe
             }
         }
     //}
+
+    public interface OnURLComputedListener {
+        void OnURLComputed(String url);
+    }
 }

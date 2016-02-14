@@ -13,6 +13,7 @@ public class Category implements Comparable<Category>{
 
     public static final String CATEGORY_NAME = "category_name";
     public static final String OWNERS = "owners";
+    public static final String ARTICLES = "articles";
 
     @JsonIgnore
     private String key;

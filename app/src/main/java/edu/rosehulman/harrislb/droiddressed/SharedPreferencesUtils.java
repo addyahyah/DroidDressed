@@ -32,10 +32,25 @@ public class SharedPreferencesUtils {
         return prefs.getString(Constants.CATEGORY_KEY, "");
     }
 
+    public static String getCurrentCategoryKey(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
+        return prefs.getString(Constants.CATEGORY_KEY, "");
+    }
+
+
+
+
     public static void setCurrentCategoryKey(Context context, String categoryKey) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constants.CATEGORY_KEY, categoryKey);
+        editor.commit();
+    }
+
+    public static void setCurrentArticleKey(Context context, String articleKey) {
+        SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.ARTICLE_KEY, articleKey);
         editor.commit();
     }
 

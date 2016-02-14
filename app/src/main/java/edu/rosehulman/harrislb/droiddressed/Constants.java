@@ -11,6 +11,7 @@ public class Constants {
     public static final String PREFS = "PREFS";
     public static final String UID_KEY = "UID_KEY";
     public static final String CATEGORY_KEY = "CATEGORY_KEY";
+    public static final String ARTICLE_KEY = "ARTICLE_KEY";
     public static final String CATEGORY_PATH = FIREBASE_URL + "/categories";
     public static final String OWNERS_PATH = FIREBASE_URL + "/owners";
     public static final String ARTICLES_PATH = FIREBASE_URL + "/articles";

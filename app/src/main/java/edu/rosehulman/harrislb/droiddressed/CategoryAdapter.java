@@ -164,8 +164,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             Category category = mCategories.get(getAdapterPosition());
             mCategorySelectedListener.onCategorySelected(category);
 
-
-
         }
 
         @Override

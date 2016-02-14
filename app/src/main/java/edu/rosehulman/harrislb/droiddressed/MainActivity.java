@@ -24,14 +24,15 @@ public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnLoginListener,
         CategoryListFragment.OnCategorySelectedListener,
         ClosetFragment.ClosetCallback, OutfitpicListFragment.Callback,
-        ArticleListFragment.ArticleCallback
+        //ArticleListFragment.ArticleCallback
+        ArticleListFragment.OnArticleSelectedListener
          {
 
     private FloatingActionButton mFab;
     private Toolbar mToolbar;
     private ArrayList<Article> previewArticles;
     private Firebase mFirebaseRef;
-
+private Fragment fragment;
 
     public FloatingActionButton getFab() {
         return mFab;
@@ -50,18 +51,22 @@ public class MainActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
         String s1 = intent.getStringExtra("Check");
+
+
         if(s1!= null && s1.equals("1")){
             System.out.println("Got check");
             s1="";
             Bundle bundle = new Bundle();
             bundle.putString("UPLOAD_URL", intent.getStringExtra("UPLOAD_URL"));
             bundle.putString("CURRENT_CATEGORY", intent.getStringExtra("CURRENT_CATEGORY"));
-            Fragment fragment = new ArticleListFragment();
+            String currentCategoryKey = SharedPreferencesUtils.getCurrentCategoryKey(this);
+            Fragment fragment = ArticleListFragment.newInstance(currentCategoryKey);
             fragment.setArguments(bundle);
+            this.fragment = fragment;
 
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_container, fragment);
-            ft.commit();
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.replace(R.id.fragment_container, fragment);
+//            ft.commit();
         }
         else{
             //should only be called the very first time activity launches
@@ -129,13 +134,16 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferencesUtils.setCurrentUser(this, uid);
 
         // Check if they have a current course
-        String currentCategoryKey = SharedPreferencesUtils.getCurrentCourseKey(this);
+        String currentCategoryKey = SharedPreferencesUtils.getCurrentCategoryKey(this);
         Fragment switchTo;
         if (currentCategoryKey == null || currentCategoryKey.isEmpty()) {
             switchTo = new ClosetFragment();
-        } else {
-            //switchTo = ArticleListFragment.newInstance(currentCategoryKey);
-            switchTo = new ClosetFragment();
+        } else if(fragment!=null) {
+            switchTo = fragment;
+            fragment = null;
+            }else{
+            switchTo = ArticleListFragment.newInstance(currentCategoryKey);
+           // switchTo = new ClosetFragment();
         }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, switchTo);

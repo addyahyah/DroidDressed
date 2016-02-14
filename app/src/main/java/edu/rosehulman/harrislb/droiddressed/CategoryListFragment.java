@@ -38,16 +38,6 @@ public class CategoryListFragment extends Fragment {
 
         Context context = getContext();
 
-       // View rootView = inflater.inflate(R.layout.fragment_category_list, container, false);
-
-//        FloatingActionButton fab = ((GradeRecorderActivity) context).getFab();
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showCategoryDialog(null);
-//            }
-//        });
-//        fab.setVisibility(View.VISIBLE);
         CoordinatorLayout cl = (CoordinatorLayout) inflater.inflate(R.layout.activity_closet, container, false);
         RecyclerView view = (RecyclerView) cl.findViewById(R.id.rec_view);
         view.setLayoutManager(new LinearLayoutManager(getContext()));
