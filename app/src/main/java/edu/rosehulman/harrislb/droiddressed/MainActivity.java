@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnLoginListener,
         CategoryListFragment.OnCategorySelectedListener,
         ClosetFragment.ClosetCallback, OutfitpicListFragment.Callback,
-        //ArticleListFragment.ArticleCallback
         ArticleListFragment.OnArticleSelectedListener
          {
 

@@ -79,9 +79,30 @@ public class ArticleListFragment extends Fragment implements ImgurActivity.OnURL
 //        recyclerView.setHasFixedSize(true);
 //        registerForContextMenu(recyclerView);
 
-        Button mPreviewOutfitButton = (Button) cl.findViewById(R.id.preview_button);
-        // mPreviewOutfitButton.setVisibility(View.INVISIBLE);
         mAdapter = new ArticleAdapter(this, mListener);
+
+
+        Button mPreviewOutfitButton = (Button) cl.findViewById(R.id.preview_button);
+        mAdapter.setPreviewOutfitButton(mPreviewOutfitButton);
+        if(mAdapter.getOnArticleSelectedListener().isPreviewButtonVisible()){
+            mPreviewOutfitButton.setVisibility(View.VISIBLE);
+        } else{
+            mPreviewOutfitButton.setVisibility(View.INVISIBLE);
+        }
+       // mPreviewOutfitButton.setVisibility(View.INVISIBLE);
+        mPreviewOutfitButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                System.out.println("preview outfit clicked");
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, PreviewOutfitFragment.newInstance());
+                ft.addToBackStack("preview_fragment");
+                ft.commit();
+            }
+
+        });
+
+
         Bundle bundle = this.getArguments();
         if(bundle!=null){
             mAdapter.firebasePush(bundle.getString("UPLOAD_URL"));

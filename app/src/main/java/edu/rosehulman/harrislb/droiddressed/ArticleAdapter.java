@@ -41,7 +41,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     private Firebase mCategoryRef;
     private Firebase mArticleRef;
     private ArrayList<Article> mArticles = new ArrayList<>();
-  //  private Button mPreviewOutfitButton;
+    private Button mPreviewOutfitButton;
 
     public ArticleAdapter(ArticleListFragment articleListFragment, ArticleListFragment.OnArticleSelectedListener listener) {
         Log.d(Constants.TAG, "ArticleAdapter adding CategoryValueListener");
@@ -178,6 +178,13 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             Article article = mArticles.get(getAdapterPosition());
             mArticleSelectedListener.onArticleSelected(article);
 
+            if(mArticleSelectedListener.isPreviewButtonVisible()){
+                mPreviewOutfitButton.setVisibility(View.VISIBLE);
+
+            } else{
+                mPreviewOutfitButton.setVisibility(View.INVISIBLE);
+
+            }
 
 
         }
@@ -188,6 +195,14 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 //            mArticleListFragment.showCategoryDialog(category);
             return true;
         }
+    }
+
+    public ArticleListFragment.OnArticleSelectedListener getOnArticleSelectedListener(){
+        return this.mArticleSelectedListener;
+    }
+
+    public void setPreviewOutfitButton(Button b){
+        this.mPreviewOutfitButton = b;
     }
 
 }
