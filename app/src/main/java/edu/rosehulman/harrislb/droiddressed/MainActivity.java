@@ -127,6 +127,7 @@ private Fragment fragment;
                  mFirebaseRef.keepSynced(true);
              }
 
+
     @Override
     public void onLoginComplete() {
         Log.d(Constants.TAG, "User is authenticated");
@@ -149,6 +150,16 @@ private Fragment fragment;
         ft.replace(R.id.fragment_container, switchTo);
         ft.commit();
     }
+
+             public void onBackPressed() {
+                 if (getFragmentManager().getBackStackEntryCount() == 0) {
+                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                     ft.replace(R.id.fragment_container, new ClosetFragment());
+                     ft.commit();
+                 } else {
+                     super.onBackPressed();
+                 }
+             }
 
 
 //    @Override

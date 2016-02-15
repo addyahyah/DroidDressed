@@ -17,7 +17,7 @@ public class Owner implements Comparable<Owner> {
     private String key;
 
     private String username;
-    private Map<String, Boolean> articles;
+    private Map<String, Boolean> categories;
 
     // Required by Firebase when deserializing json
     public Owner() {
@@ -39,12 +39,12 @@ public class Owner implements Comparable<Owner> {
         this.username = username;
     }
 
-    public Map<String, Boolean> getCourses() {
-        return articles;
+    public Map<String, Boolean> getCategories() {
+        return categories;
     }
 
-    public void setCourses(Map<String, Boolean> articles) {
-        this.articles = articles;
+    public void setCategories(Map<String, Boolean> categories) {
+        this.categories = categories;
     }
 
     @Override
@@ -52,8 +52,8 @@ public class Owner implements Comparable<Owner> {
         return username;
     }
 
-    public boolean containsCourse(String courseKey) {
-        return articles != null && articles.containsKey(courseKey);
+    public boolean containsCategory(String categoryKey) {
+        return categories != null && categories.containsKey(categoryKey);
     }
 
     @Override

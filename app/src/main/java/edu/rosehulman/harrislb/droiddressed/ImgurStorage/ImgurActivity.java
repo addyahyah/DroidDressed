@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
@@ -156,6 +157,7 @@ public class ImgurActivity extends AppCompatActivity implements Callback<ImageRe
             Intent intent = new Intent(ImgurActivity.this, MainActivity.class);
             intent.putExtra("UPLOAD_URL", url);
             System.out.println("Intent stored");
+            intent.putExtra("Check", "1");
 
 
             //this.onBackPressed();
@@ -163,8 +165,11 @@ public class ImgurActivity extends AppCompatActivity implements Callback<ImageRe
           //  intent.putExtra("UPLOAD_URL", url);
 
             intent.putExtra("CURRENT_CATEGORY", currentCat);
-            startActivity(intent);
 
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+
+            startActivity(intent);
+            finish();
 
 
             clearInput();

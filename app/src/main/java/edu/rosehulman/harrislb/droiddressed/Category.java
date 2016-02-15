@@ -19,6 +19,7 @@ public class Category implements Comparable<Category>{
     private String key;
     private String categoryName;
     private Map<String, Boolean> owners;
+    private Map<String, Boolean> articles;
 
     public Category() {
 
@@ -55,6 +56,8 @@ public class Category implements Comparable<Category>{
     public Map<String, Boolean> getOwners(){
         return this.owners;
     }
+
+    public Map<String, Boolean> getArticles() {return this.articles;}
 
     public int compareTo(Category another) {
         return categoryName.compareTo(another.categoryName);

@@ -89,7 +89,11 @@ public class ArticleListFragment extends Fragment implements ImgurActivity.OnURL
         }
         view.setAdapter(mAdapter);
 
+        //clear backstack
+       while(getActivity().getFragmentManager().getBackStackEntryCount()!=0){
 
+           getActivity().getFragmentManager().popBackStack();
+       }
 
         return cl;
     }
@@ -186,6 +190,9 @@ public class ArticleListFragment extends Fragment implements ImgurActivity.OnURL
         ArticleListFragment fragment = new ArticleListFragment();
         return fragment;
     }
+
+
+
 }
 
 
