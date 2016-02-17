@@ -218,7 +218,7 @@ public class LoginFragment extends Fragment {
     @SuppressLint("InflateParams")
     private void showUsernameDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Enter Rose username");
+        builder.setTitle("Enter Username");
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_get_username, null);
         builder.setView(view);
         final EditText roseUsernameEditText = (EditText) view

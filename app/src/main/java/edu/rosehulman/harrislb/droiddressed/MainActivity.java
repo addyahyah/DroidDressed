@@ -20,16 +20,23 @@ import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
 
+import edu.rosehulman.harrislb.droiddressed.ImgurStorage.ImgurActivity;
+import edu.rosehulman.harrislb.droiddressed.OutfitFromFragment.OutfitFromCallback;
+
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnLoginListener,
         CategoryListFragment.OnCategorySelectedListener,
         ClosetFragment.ClosetCallback, OutfitpicListFragment.Callback,
-        ArticleListFragment.OnArticleSelectedListener
+        ArticleListFragment.OnArticleSelectedListener,
+        OutfitCategoryListFragment.OnOutfitCategorySelectedListener,
+        OutfitListFragment.OnOutfitSelectedListener,
+        OutfitFromCallback
          {
 
     private FloatingActionButton mFab;
     private Toolbar mToolbar;
     private ArrayList<Article> previewArticles;
+             private ArrayList<String> previewArticleIDs;
     private Firebase mFirebaseRef;
 private Fragment fragment;
 
@@ -44,6 +51,8 @@ private Fragment fragment;
     public ArrayList<Article> getPreviewArticles(){
         return this.previewArticles;
     }
+
+    public ArrayList<String> getPreviewArticleIDs() { return this.previewArticleIDs;}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +67,18 @@ private Fragment fragment;
             Bundle bundle = new Bundle();
             bundle.putString("UPLOAD_URL", intent.getStringExtra("UPLOAD_URL"));
             bundle.putString("CURRENT_CATEGORY", intent.getStringExtra("CURRENT_CATEGORY"));
-            String currentCategoryKey = SharedPreferencesUtils.getCurrentCategoryKey(this);
-            Fragment fragment = ArticleListFragment.newInstance(currentCategoryKey);
+            Fragment fragment;
+            if(intent.getStringExtra("CAME_FROM").equals("article")){
+                String currentCategoryKey = SharedPreferencesUtils.getCurrentCategoryKey(this);
+                fragment = ArticleListFragment.newInstance(currentCategoryKey);
+            }
+            // else: (intent.getStringExtra("CAME_FROM").equals("outfit"))
+            else{
+                System.out.println("Setting outfitlistfragment after IMGUR activity");
+                String currentCategoryKey = SharedPreferencesUtils.getCurrentOutfitCategoryKey(this);
+                fragment = OutfitListFragment.newInstance(currentCategoryKey);
+            }
+
             fragment.setArguments(bundle);
             this.fragment = fragment;
 
@@ -88,6 +107,7 @@ private Fragment fragment;
         }
 
         previewArticles = new ArrayList<Article>();
+        previewArticleIDs = new ArrayList<String>();
 
       //  mFab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -215,12 +235,14 @@ private Fragment fragment;
 
         if(previewArticles.contains(article)){
             previewArticles.remove(article);
+            previewArticleIDs.remove(article.getKey());
             if(previewArticles.size()==0){
                 return false;
             }
         }
         else{
             previewArticles.add(article);
+            previewArticleIDs.add(article.getKey());
 
         }
         return true;
@@ -262,7 +284,11 @@ private Fragment fragment;
 
              @Override
              public void onOutfitButtonSelected() {
-
+                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                 OutfitCategoryListFragment fragment = new OutfitCategoryListFragment();
+                 ft.replace(R.id.fragment_container, fragment);
+                 ft.addToBackStack("outfitcategory");
+                 ft.commit();
              }
 
              @Override
@@ -281,7 +307,32 @@ private Fragment fragment;
 
              public void resetPreviewArticles(){
                  this.previewArticles = new ArrayList<Article>();
+                 this.previewArticleIDs = new ArrayList<String>();
              }
+
+             @Override
+             public void onOutfitCategorySelected(OutfitCategory selectedCategory) {
+                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                 ft.replace(R.id.fragment_container, OutfitListFragment.newInstance(selectedCategory.getKey()));
+                 ft.addToBackStack("outfitListFragment");
+                 ft.commit();
+
+             }
+
+             @Override
+             public boolean onOutfitSelected(Outfit selectedOutfit) {
+                 return false;
+             }
+
+             @Override
+             public void onPhotosButtonSelected() {
+                 //imgur method
+                 Intent intent = new Intent(this, ImgurActivity.class);
+                 intent.putExtra("CURRENT_CATEGORY", SharedPreferencesUtils.getCurrentOutfitCategoryKey(this));
+                 intent.putExtra("CAME_FROM", "outfit");
+                 startActivity(intent);
+             }
+
 
 //    @Override
 //    public void onThisOwnerRemoved() {

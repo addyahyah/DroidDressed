@@ -35,6 +35,7 @@ public class ImgurActivity extends AppCompatActivity implements Callback<ImageRe
 
     private String url;
     private String currentCat;
+    private String cameFrom;
     /*
       These annotations are for ButterKnife by Jake Wharton
       https://github.com/JakeWharton/butterknife
@@ -59,6 +60,7 @@ public class ImgurActivity extends AppCompatActivity implements Callback<ImageRe
 
         Intent intent = getIntent();
         currentCat = intent.getStringExtra("CURRENT_CATEGORY");
+        cameFrom = intent.getStringExtra("CAME_FROM");
         System.out.println("currentCat in imgur activity is "+ currentCat);
 
         //setSupportActionBar(toolbar);
@@ -165,6 +167,7 @@ public class ImgurActivity extends AppCompatActivity implements Callback<ImageRe
           //  intent.putExtra("UPLOAD_URL", url);
 
             intent.putExtra("CURRENT_CATEGORY", currentCat);
+            intent.putExtra("CAME_FROM", cameFrom);
 
             //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
 

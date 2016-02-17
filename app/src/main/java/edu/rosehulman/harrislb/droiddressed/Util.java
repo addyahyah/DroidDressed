@@ -91,7 +91,11 @@ public class Util {
         SharedPreferencesUtils.removeCurrentCourseKey(context);
     }
 
-    public static void removeArticle(Context context, Article article) {
+    public static void removeOutfitCategory(Context context, OutfitCategory category) {
+
+    }
+
+        public static void removeArticle(Context context, Article article) {
         //TODO hande delete
     }
 

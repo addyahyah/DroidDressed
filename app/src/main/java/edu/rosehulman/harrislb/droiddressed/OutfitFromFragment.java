@@ -1,6 +1,7 @@
 package edu.rosehulman.harrislb.droiddressed;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,38 +12,43 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import edu.rosehulman.harrislb.droiddressed.ImgurStorage.ImgurActivity;
+
 /**
  * Created by harrislb on 1/25/2016.
  */
-public class ClosetFragment extends Fragment {
+public class OutfitFromFragment extends Fragment {
 
-    private Button outfitButton;
+    private Button photosButton;
     private Button articlesButton;
-    private ClosetCallback mCallback;
+    private OutfitFromCallback mCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_closet, container, false);
-        outfitButton = (Button) view.findViewById(R.id.outfit_button);
+        photosButton = (Button) view.findViewById(R.id.outfit_button);
         articlesButton = (Button) view.findViewById(R.id.articles_button);
 
-        outfitButton.setOnClickListener(new View.OnClickListener() {
+        photosButton.setText("From Photos");
+        articlesButton.setText("From Articles");
+        photosButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // mCallback.onOutfitButtonSelected();
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                SimpleOrComplexFragment fragment = new SimpleOrComplexFragment();
-                ft.replace(R.id.fragment_container, fragment);
-                ft.addToBackStack("simple or complex outfit");
-                ft.commit();
+                //mCallback.onOutfitButtonSelected();
+                    mCallback.onPhotosButtonSelected();
             }
         });
 
         articlesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.onArticlesButtonSelected();
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                CategoryListFragment fragment = new CategoryListFragment();
+                ft.replace(R.id.fragment_container, fragment);
+                ft.addToBackStack("article categories");
+                ft.commit();
+
             }
         });
 
@@ -53,8 +59,8 @@ public class ClosetFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof ClosetCallback) {
-            mCallback = (ClosetCallback) context;
+        if(context instanceof OutfitFromCallback) {
+            mCallback = (OutfitFromCallback) context;
         } else{
             throw new RuntimeException(context.toString() + " must implement Callback");
         }
@@ -66,9 +72,8 @@ public class ClosetFragment extends Fragment {
         mCallback = null;
     }
 
-    public interface ClosetCallback{
-        void onOutfitButtonSelected();
-        void onArticlesButtonSelected();
+    public interface OutfitFromCallback{
+        void onPhotosButtonSelected();
     }
 
 //    @Override

@@ -23,7 +23,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.firebase.client.Firebase;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by harrislb on 2/7/2016.
@@ -35,6 +39,7 @@ public class PreviewOutfitFragment extends Fragment {
     //private static final ArrayList<Article> ARG_PREVIEW_ARTICLES_KEY = "CURRENT_CATEGORY_KEY";
     //private String mCurrentCategoryKey;
     private ArrayList<Article> previewArticles;
+    private ArrayList<String> previewArticleIDs;
     private ComplexOutfit newOutfit;
 
     public PreviewOutfitFragment(){}
@@ -48,6 +53,7 @@ public class PreviewOutfitFragment extends Fragment {
         }
         newOutfit = new ComplexOutfit();
         previewArticles = ((MainActivity) getActivity()).getPreviewArticles();
+        previewArticleIDs = ((MainActivity) getActivity()).getPreviewArticleIDs();
         System.out.println("size of prev articles is: " + previewArticles.size());
 
     }
@@ -135,6 +141,19 @@ public class PreviewOutfitFragment extends Fragment {
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Firebase mArticleRef = new Firebase(Constants.COMPLEX_OUTFITS_PATH);
+
+                        Firebase ref = mArticleRef.push();
+                        // Add the category to the categorys path
+                        //ref.setValue(new Article(articleURL, mUid));
+                        ref.setValue(new ComplexOutfit(SharedPreferencesUtils.getCurrentOutfitCategoryKey(getActivity()),previewArticleIDs));
+                        System.out.println("****HERE " + SharedPreferencesUtils.getCurrentOutfitCategoryKey(getActivity()));
+                        // Add the category to the owners path
+                        Map<String, Object> map = new HashMap<>();
+                        map.put(ref.getKey(), true);
+                        // See https://www.firebase.com/docs/android/guide/saving-data.html for this method.
+                        Firebase mOutfitCategoryRef = new Firebase(Constants.OUTFIT_CATEGORY_PATH);
+                        mOutfitCategoryRef.child(OutfitCategory.COMPLEX_OUTFITS).updateChildren(map);
 
                     }
                 });

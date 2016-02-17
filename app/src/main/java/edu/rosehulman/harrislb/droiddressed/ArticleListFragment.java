@@ -64,6 +64,8 @@ public class ArticleListFragment extends Fragment implements ImgurActivity.OnURL
                                        //imgur method
                                        Intent intent = new Intent(getActivity(), ImgurActivity.class);
                                        intent.putExtra("CURRENT_CATEGORY", SharedPreferencesUtils.getCurrentCategoryKey(context));
+                                       intent.putExtra("CAME_FROM", "article");
+
                                        startActivity(intent);
                                    }
                                });

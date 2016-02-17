@@ -18,6 +18,7 @@ public class Article implements Comparable<Article>{
     private String key;
     private String url;
     private Map<String, Boolean> categories;
+    private Map<String, Boolean> outfits;
 
     public Article() {
 
@@ -50,6 +51,8 @@ public class Article implements Comparable<Article>{
     public Map<String, Boolean> getCategories(){
         return this.categories;
     }
+
+    public Map<String, Boolean> getOutfits() { return this.outfits;}
 
     public int compareTo(Article another) {
         return url.compareTo(another.url);

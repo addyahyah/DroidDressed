@@ -46,11 +46,37 @@ public class SharedPreferencesUtils {
         editor.putString(Constants.CATEGORY_KEY, categoryKey);
         editor.commit();
     }
+    public static String getCurrentOutfitCategoryKey(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
+        return prefs.getString(Constants.OUTFIT_CATEGORY_KEY, "");
+    }
+
+
+
+//    public static void setCurrentComplexOutfitCategoryKey(Context context, String outfitCategoryKey) {
+//        SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = prefs.edit();
+//        editor.putString(Constants.COMPLEX_OUTFIT_CATEGORY_KEY, outfitCategoryKey);
+//        editor.commit();
+//    }
+    public static void setCurrentOutfitCategoryKey(Context context, String outfitCategoryKey) {
+        SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.OUTFIT_CATEGORY_KEY, outfitCategoryKey);
+        editor.commit();
+    }
 
     public static void setCurrentArticleKey(Context context, String articleKey) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constants.ARTICLE_KEY, articleKey);
+        editor.commit();
+    }
+
+    public static void setCurrentOutfitKey(Context context, String outfitKey) {
+        SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.OUTFIT_KEY, outfitKey);
         editor.commit();
     }
 
