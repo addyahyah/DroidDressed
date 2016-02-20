@@ -20,6 +20,16 @@
         tools:context=".fragments.WeatherpicListFragment"
         android:id="@+id/rec_view"> </android.support.v7.widget.RecyclerView>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/preview_button"
+        android:layout_gravity="bottom|left|end"
+        android:text="PREVIEW OUTFIT"
+        android:layout_margin="@dimen/fab_margin"
+        android:visibility = "invisible"
+      />
+
 
 
 

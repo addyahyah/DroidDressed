@@ -36,7 +36,15 @@
     <string name="incorrect_password">Password is incorrect</string>
     <string name="field_required">This field is required</string>
 
+    <string name="dialog_category_add_title">Add category</string>
+    <string name="dialog_category_edit_title">Edit category</string>
+    <string name="dialog_category_hint">Category name</string>
 
+    <string name="remove">Remove</string>
+    <string name="remove_question_format">Remove %s?</string>
+    <string name="fragment_preview_add_outfit_question">Add This Outfit?</string>
+    <string name="imgur_title">Title</string>
+    <string name="imgur_description">Description</string>
 
 
 </resources>
